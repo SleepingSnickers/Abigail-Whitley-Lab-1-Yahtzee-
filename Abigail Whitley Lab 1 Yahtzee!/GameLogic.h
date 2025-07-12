@@ -12,6 +12,9 @@ class GameLogic {
 private:
 	Die* dice;
 	int sizeOfHand;
+	int scores[6];
+	int used[6];
+	ConsoleUI ui;
 
 public:
 	//setters
@@ -23,7 +26,6 @@ public:
 	int getSizeOfHand() const;
 
 	//other
-	string displayDieHand() const;
 	void rollDie(int dieNum);
 	void rollAllDice();
 	GameLogic();
