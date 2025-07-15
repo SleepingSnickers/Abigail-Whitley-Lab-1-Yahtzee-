@@ -2,54 +2,56 @@
 #include <string>
 #include "ConsoleUI.h"
 #include "Die.h"
-#include "GameLogic.h"
 
 using namespace std;
 
 void ConsoleUI::displayDice(Die* dice) {
 	for (int i = 0; i < 5; i++) {
-		cout << "Die " << (i + 1) << ": " << dice[i].getFaceValue() << endl;
+		cout << "Die " << i + 1 << ": " << dice[i].getFaceValue() << endl;
 	}
 }
 
-void ConsoleUI::displayScore(const int scores[6], const int used[6]) {
+void ConsoleUI::displayScores(const int scores[6], const int used[6]) {
 	for (int i = 0; i < 6; i++) {
 		if (used[i]) {
 			cout << i + 1 << ": " << scores[i] << endl;
 		}
-		else {
-			cout << i + 1 << ": " << endl;
-		}
+		else cout << i + 1 << ": (available score)" << endl;
 	}
 }
 
 bool* ConsoleUI::keepDice() {
-	static bool choice[5];
+	bool keep[5];
 
-	cout << "(1) to keed the die, (0) to re-roll: " << endl;
+	cout << "For each dice, enter 1 to keep, 0 to re-roll." << endl;
+
 	for (int i = 0; i < 5; i++) {
-		cin >> choice[i];
+		cin >> keep[i];
 	}
 
-	return choice;
+	return keep;
 }
 
 int ConsoleUI::scoreCategory(const int used[6]) {
-	int choice;
+	int userChoice;
 
 	do {
-		cout << "Choose the category (1 - 6) to store your score (empty categories only): " << endl;
-		cin >> choice;
-	} while (choice < 1 || choice > 6 || used[choice - 1]);
+		cout << "Choose an empty category to add your score into: ";
+		cin >> userChoice;
+	} while (userChoice < 1 || userChoice > 6 || used[userChoice - 1]);
 
-	return choice - 1;
+	return userChoice- 1;
 }
 
 int ConsoleUI::replay() {
-	int input;
+	int userReplay;
 
-	cout << "Would you like to play again? No (1) or Yes (2): " << endl;
-	cin >> input;
+	cout << "Would you like to play again? Yes (1) or No (2): " << endl;
+	cin >> userReplay;
 
-	return input == 2;
+	return userReplay;
+}
+
+void ConsoleUI::displayFinalScores(int total) {
+	cout << "Final Score: " << total << endl;
 }

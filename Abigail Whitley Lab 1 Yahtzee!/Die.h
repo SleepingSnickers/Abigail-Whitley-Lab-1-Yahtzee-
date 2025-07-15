@@ -10,15 +10,10 @@ private:
 	const int numberOfSides;
 	int faceValue;
 public:
-	//setters
-	void setFaceValue(int value);
-	//getters
-	int getFaceValue() const;
-	//others
-	//roll() method
-	void roll();
-	//default constructor
 	Die();
+	void setFaceValue(int value);
+	int getFaceValue() const;
+	void roll();
 };
 
 #endif

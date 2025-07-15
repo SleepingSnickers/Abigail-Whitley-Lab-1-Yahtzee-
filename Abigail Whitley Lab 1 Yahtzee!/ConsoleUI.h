@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+#include "Die.h"
+
 using namespace std;
 
 class ConsoleUI {
@@ -10,10 +12,11 @@ private:
 	
 public:
 	void displayDice(Die*);
-	void displayScore(const int, const int);
+	void displayScores(const int[], const int[]);
 	bool* keepDice();
-	int scoreCategory(const int);
+	int scoreCategory(const int[]);
 	int replay();
+	void displayFinalScores(int);
 };
 
 #endif

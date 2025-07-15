@@ -7,47 +7,78 @@
 
 using namespace std;
 
-GameLogic::GameLogic() : GameLogic(new Die[5], 5) {
-
-}
-
-GameLogic::GameLogic(Die* dicePtr, int size) {
-	sizeOfHand = size;
-	//allocating the memory for new dice
-	dice = dicePtr;
+GameLogic::GameLogic() {
+	for (int i = 0; i < 6; i++) {
+		scorePositions[i] = 0;
+		usedScorePositions[i] = 0;
+	}
 }
 
 GameLogic::~GameLogic() {
-	delete[] dice;
+	/*for (int i = 0; i < 5; i++) {
+		delete[] dice;
+	}*/
 }
 
-void GameLogic::setDice(Die* dicePtr) {
-	dice = dicePtr;
-}
-
-void GameLogic::setSizeOfHand(int size) {
-	sizeOfHand = size;
-}
-
-Die* GameLogic::getDice() const {
-	return dice;
-}
-
-int GameLogic::getSizeOfHand() const {
-	return sizeOfHand;
-}
-
-//dieNum works the same as i in the previous for loop
-void GameLogic::rollDie(int dieNum) {
-	//if statement is used here because I'm only rolling a single die
-	if (dieNum >= 0 && dieNum < sizeOfHand) {
-		dice[dieNum].roll();
+void GameLogic::playGame() {
+	for (int rounds = 0; rounds < 6; rounds++) {
+		playRound();
 	}
+	ui.displayFinalScores(totalScore());
 }
 
-void GameLogic::rollAllDice() {
-	//for loop is used here because I'm rolling thru all of the dice in my hand
-	for (int i = 0; i < sizeOfHand; i++) {
+void GameLogic::playRound() {
+	for (int i = 0; i < 5; i++) {
 		dice[i].roll();
 	}
+
+	for (int rolls = 1; rolls < 3; rolls++) {
+		ui.displayDice(dice);
+
+		bool* keep = ui.keepDice();
+		for (int i = 0; i < 5; i++) {
+			if (!keep[i]) {
+				dice[i].roll();
+			}
+		}
+	}
+	ui.displayDice(dice);
+	ui.displayScores(scorePositions, usedScorePositions);
+
+	int category = ui.scoreCategory(usedScorePositions);
+	scorePositions[category] = calcScore(category);
+	usedScorePositions[category] = 1;
+}
+
+int GameLogic::calcScore(int category) {
+	int catTotal = 0;
+
+	for (int i = 0; i < 5; i++) {
+		if (dice[i].getFaceValue() == category + 1) {
+			catTotal += dice[i].getFaceValue();
+		}
+	}
+	return catTotal;
+}
+
+int GameLogic::totalScore() const {
+	int scoreTotal = 0;
+
+	for (int i = 0; i < 6; i++) {
+		scoreTotal += scorePositions[i];
+	}
+
+	return scoreTotal;
+}
+
+void GameLogic::reset() {
+	for (int i = 0; i < 6; i++) {
+		scorePositions[i] = 0;
+		usedScorePositions[i] = 0;
+	}
+}
+
+bool GameLogic::replay() {
+	int choice = ui.replay();
+	return choice == 1;
 }
