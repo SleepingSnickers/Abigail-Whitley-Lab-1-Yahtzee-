@@ -10,10 +10,13 @@
 using namespace std;
 
 int main() {
+	//seeds the random dice rolls
 	srand(time(0));
 
+	//instantiates the game
 	GameLogic myGame;
 
+	//do while loop to allow the replay system to work
 	do {
 		myGame.reset();
 		myGame.playGame();
